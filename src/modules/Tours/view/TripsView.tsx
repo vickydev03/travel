@@ -145,7 +145,7 @@ function TripDetailsContainer({ tripId }: { tripId: number }) {
           },
         }),
       );
-
+      
     const hasDates = data.TripDate && data.TripDate.length > 0;
     const months = hasDates ? [...new Set(data.TripDate.map((d) => dayjs(d.startDate).format("MMM YY")))] : [];
     const [selectedMonth, setSelectedMonth] = useState<string | null>(months[0] ?? null);
