@@ -1,0 +1,315 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model User {
+  id        String   @id
+  name      String?
+  email     String   @unique
+  phone     String?  @unique
+  imageUrl  String?
+  password  String?
+  role      Role     @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookingSession BookingSession[]
+  bookings  Booking[]
+  reviews Review[]
+
+  @@index([id,email])
+}
+
+model Booking {
+  id Int  @id @default(autoincrement())
+  userId String 
+  tripId     Int
+  tripDateId Int
+  mobileNumber String?
+
+  user User @relation( fields: [userId],references: [id])
+  trip       Trip     @relation(fields: [tripId], references: [id])
+  tripDate   TripDate @relation(fields: [tripDateId], references: [id])
+  
+  status     BookingStatus @default(PENDING)
+  items BookingItem[]
+  // payments Payment[]
+  totalAmount Int
+  totalSeats  Int
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+
+  @@index([userId])
+  @@index([tripId])
+  @@index([tripDateId])
+}
+
+model Review{
+  id Int  @id @default(autoincrement())
+  rating Int 
+  userId String 
+  tourId Int
+  review String 
+  user      User     @relation(fields: [userId], references: [id])
+  tour      Tour     @relation(fields: [tourId], references: [id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+   @@unique([userId, tourId])
+}
+
+model Tour {
+  id        Int      @id @default(autoincrement())
+
+  title     String   @unique
+  slug      String   @unique
+
+  about     String
+
+  // Images & Media
+  thumbnailImageUrl String   // main banner image
+  thumbnailVideoUrl String?  // optional video
+  cardImageUrl      String   // SMALL clickable box/card image
+  
+  // Relations
+  reviews   Review[]
+  trips     Trip[]
+  faq       Faq[]
+  tourTypeId Int
+  tourType   TourType @relation(fields: [tourTypeId], references: [id])
+
+  // Visibility & Control
+  isActive  Boolean  @default(true)
+  isFeatured Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([tourTypeId])
+}
+
+//mainly for the domestic ,internation,weekend
+model TourType{
+
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title  String @unique
+  slug        String   @unique
+  description String?
+  isActive    Boolean  @default(true)
+  priority    Int      @default(0)
+  tours       Tour[]
+}
+
+model Trip{
+  id Int @id @default(autoincrement())
+  categoryId Int 
+  category  Category     @relation(fields: [categoryId], references: [id])
+  tourId      Int
+  tour      Tour     @relation(fields: [tourId], references: [id])
+
+  thumbnailImageUrl String
+  thumbnailVideoUrl String
+  cardImageUrl String
+  isFeature    Boolean @default(false)
+  title String
+  slug String @unique
+  inclusion String
+  exclusion String
+  notes String
+  startingPrice    Int  //this price is not for the booking it is only for the showing on the tripc page
+  ItineraryLink String
+  ItineraryImageUrl String
+  About     String  @default("")
+  Itinerary  Itinerary[]
+  TripDate TripDate[]
+  bookingSession BookingSession[]
+  Booking Booking[]
+}
+
+model TripDate {
+  id        Int      @id @default(autoincrement())
+  tripId    Int
+  startDate DateTime
+  endDate   DateTime
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  booking  Booking[]
+  pricing  TripPricing[] 
+  bookingSession BookingSession[]
+  createdAt DateTime @default(now())
+}
+
+enum SharingType {
+  DOUBLE
+  TRIPLE
+  SINGLE
+  QUAD
+}
+
+
+model Itinerary {
+  id Int @id @default(autoincrement())
+  tripId Int 
+  trip      Trip     @relation(fields: [tripId], references: [id],onDelete: Cascade)
+
+  title       String
+  description String
+  dayNumber Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+   @@unique([tripId, dayNumber])
+}
+
+
+model Category {
+  id Int @id @default(autoincrement())
+  slug String @unique
+  title String @unique
+  trip  Trip[]
+
+}
+
+model VibeVideo {
+  id Int @id @default(autoincrement())
+  url String
+  title String?
+  order Int?
+
+}
+
+
+
+
+model TripPricing {
+  id          Int          @id @default(autoincrement())
+  tripDateId Int
+  sharing     SharingType
+  price       Int
+  
+  tripDate    TripDate @relation(fields: [tripDateId], references: [id], onDelete: Cascade)
+
+  @@unique([tripDateId, sharing])
+  @@index([tripDateId])
+}
+
+
+
+model Faq {
+  id        Int      @id @default(autoincrement())
+  tourId    Int
+  question  String
+  answer    String
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tour      Tour     @relation(fields: [tourId], references: [id], onDelete: Cascade)
+
+  @@index([tourId])
+}
+
+
+enum BookingSessionStatus {
+  PENDING          
+  PAID        
+  FAILED     
+  EXPIRED     
+  CANCELLED   
+  REFUNDED    
+}
+
+
+model BookingSession {
+  id           String   @id @default(uuid())
+
+  userId       String  
+  tripId       Int
+  tripDateId   Int
+
+  seatCount    Int      
+
+  status       BookingSessionStatus @default(PENDING)
+
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User    @relation(fields: [userId], references: [id])
+  trip         Trip     @relation(fields: [tripId], references: [id])
+  tripDate     TripDate @relation(fields: [tripDateId], references: [id])
+
+  
+  @@index([tripDateId])
+  @@index([userId])
+  @@index([status])
+}
+
+
+model BookingItem {
+  id Int @id @default(autoincrement())
+
+  bookingId Int
+  sharingType SharingType
+  quantity Int
+  pricePerPerson Int   // freeze price
+  subtotal Int         // quantity * pricePerPerson
+
+  booking Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId])
+}
+
+
+
+// enum PaymentStatus {
+//   CREATED
+//   SUCCESS
+//   FAILED
+//   REFUNDED
+// }
+
+// model Payment {
+//   id String @id @default(uuid())
+
+//   bookingSessionId String
+//   bookingId Int?
+  
+//   razorpayOrderId String @unique
+//   razorpayPaymentId String? 
+//   razorpaySignature String?
+
+//   amount Int
+//   currency String @default("INR")
+
+//   status PaymentStatus @default(CREATED)
+
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   booking Booking? @relation(fields: [bookingId], references: [id])
+
+//   @@index([bookingSessionId])
+//   @@index([bookingId])
+// }

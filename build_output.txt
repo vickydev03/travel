@@ -1,0 +1,28 @@
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+   Γû▓ Next.js 16.0.10 (Turbopack)
+   - Environments: .env
+
+ ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+   Creating an optimized production build ...
+[baseline-browser-mapping] The data in this module is over two months old.  To ensure accurate Baseline data, please update: `npm i baseline-browser-mapping@latest -D`
+
+> Build error occurred
+Error: Turbopack build failed with 1 errors:
+./src/modules/admin/view/AdminView.tsx:1678:2
+Parsing ecmascript source code failed
+  1676 |     </form>
+  1677 |   );
+> 1678 | }
+       |  ^
+  1679 |
+
+Expected '}', got '<eof>'
+
+Import trace:
+  Client Component Browser:
+    ./src/modules/admin/view/AdminView.tsx [Client Component Browser]
+    ./src/app/admin/page.tsx [Client Component Browser]
+    ./src/app/admin/page.tsx [Server Component]
+
+
+    at <unknown> (./src/modules/admin/view/AdminView.tsx:1678:2)
