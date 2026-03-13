@@ -26,7 +26,7 @@ interface subMenuType {
 }
 
 function CategoryBar() {
-  const menu = [
+    const menu = [
     {
       title: "Group Trips",
       url: null,

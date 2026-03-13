@@ -38,6 +38,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
+import { Users } from "lucide-react";
 function Navbar() {
   const trpc = useTRPC();
   const { user, loading, openLogin, setOpenLogin } = useAuth();
@@ -75,6 +76,78 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const menu = [
+      {
+        title: "Group Trips",
+        url: null,
+        icon: <Users />,
+        emoji: null,
+        subCategary: [
+          {
+            title: "International Group Trips",
+            url: "",
+            icon: null,
+            emoji: "✈️",
+          },
+          {
+            title: "Domestic Groups Trips",
+            url: "",
+            icon: "/icon/india.png",
+            emoji: null,
+          },
+        ],
+      },
+      {
+        title: "Deals",
+        url: null,
+        icon: null,
+        emoji: "🏷️",
+        subCategary: [
+          { title: "New Year Gateways", url: "", icon: null, emoji: "🔥" },
+          { title: "Goa Trip", url: "", icon: null, emoji: "🔥" },
+        ],
+      },
+      {
+        title: "Travel Style",
+        url: null,
+        icon: null,
+        emoji: "🧳",
+        subCategary: [
+          { title: "Weakend Trip", url: "", icon: null, emoji: "🛻" },
+          { title: "Spritual Trips", url: "", icon: null, emoji: "🧘‍♀️" },
+        ],
+      },
+      {
+        title: "Upcoming Group Trips",
+        url: "",
+        icon: null,
+        emoji: "🧳",
+        subCategary: null,
+      },
+      { title: "Below 10K", url: "", icon: null, emoji: "💸", subCategary: null },
+      {
+        title: "Customised Trips",
+        url: null,
+        icon: null,
+        emoji: "🌏",
+        subCategary: [
+          { title: "International Trips", url: "", icon: null, emoji: "✈️" },
+          {
+            title: "Domestic Trips",
+            url: "",
+            icon: "/icon/india.png",
+            emoji: null,
+          },
+          {
+            title: "Corporate Trips",
+            url: "",
+            icon: null,
+            emoji: "🏢",
+          },
+        ],
+      },
+      { title: "About Us", url: "", icon: null, emoji: "🤵", subCategary: null },
+    ];
   return (
     <div className="flex max-w-[90%] mx-auto w-full items-center justify-between bg-transparent md:bg-background ">
 
