@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import BookingDetails from "@/modules/bookings/view/BookingDetails";
 import TripsView from "@/modules/Tours/view/TripsView";
 import { getQueryClient, trpc } from "@/trpc/server";

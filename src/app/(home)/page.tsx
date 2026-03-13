@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import HomeView from "@/modules/home/view/HomeView";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";
 import { caller, getQueryClient, trpc } from "@/trpc/server";

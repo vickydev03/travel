@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import TripsView from "@/modules/Tours/view/TripsView";
 import { getQueryClient, trpc, caller } from "@/trpc/server";
 import { dehydrate, HydrationBoundary } from "@tanstack/react-query";

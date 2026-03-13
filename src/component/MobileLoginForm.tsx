@@ -14,7 +14,7 @@ import z from "zod";
 import { loginSchema } from "@/utils/schema";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { sendOtp } from "@/lib/sendOtp";
+// import { sendOtp } from "@/lib/sendOtp";
 import { supabase } from "@/utils/supabase";
 import { useMutation } from "@tanstack/react-query";
 // import { trpc } from "@/trpc/server";
