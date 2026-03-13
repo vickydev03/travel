@@ -162,8 +162,6 @@ function Navbar() {
                   <DropdownMenuItem>
                     <Button className="w-full" onClick={handleLogout}>Log out</Button>
                   </DropdownMenuItem>
-                  
-
                 </DropdownMenuContent>
               </DropdownMenu>
             </>
@@ -173,7 +171,7 @@ function Navbar() {
 
       <div className="md:hidden">
         <p>
-          <a href="tel:+442071234567">
+          <a href="tel:+918120640655">
             <Phone className="size-5  stroke-white" />
           </a>
         </p>
