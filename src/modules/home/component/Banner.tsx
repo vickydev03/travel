@@ -12,7 +12,7 @@ function Banner() {
             muted
             className="h-full object-cover aspect-video w-full  max-h-128 "
           >
-            <source src="/video/video-1.mp4" type="video/mp4" />
+            <source src="/video/video-1.webm" type="video/mp4" />
           </video>
         </div>
       </div>

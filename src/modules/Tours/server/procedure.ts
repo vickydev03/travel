@@ -9,12 +9,30 @@ import { string, z } from "zod";
 export const TourRouter = createTRPCRouter({
   getTripType: baseProcedure.query(async ({ ctx }) => {
     const data = await ctx.db.tourType.findMany({
+      where:{
+        tours:{
+          some:{
+            trips:{
+              some:{
+                TripDate:{
+                  some:{
+                    startDate:{
+                      gte: new Date(),
+                    },
+                  },
+                },
+              },
+            },
+          },
+        }
+      },
         include: {
           _count: {
             select: { tours: true }, 
           },
         },
     });
+
 
     return data;
   }),

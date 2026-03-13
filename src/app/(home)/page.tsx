@@ -16,14 +16,7 @@ export const metadata: Metadata = {
 };
 
 async function page() {
-  // console.log(77777)
-  
-  try {
-    const user = await caller.user.profile();
-    console.log(user)
-  } catch (error) {
-    console.log(error)
-  }
+
   const queryClient = getQueryClient();
   void queryClient.prefetchQuery(trpc.tours.getTripType.queryOptions());
   void queryClient.prefetchQuery(trpc.tours.getAllTour.queryOptions());

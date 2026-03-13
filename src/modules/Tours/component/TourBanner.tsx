@@ -28,6 +28,8 @@ function TourBanner({ thumnailImage: initialImage, thumnailvideo: initialVideo, 
         <div className="relative  overflow-hidden">
           <div className=" h-full">
             <video
+            preload="metadata"
+            poster={thumnailImage}
               autoPlay
               loop
               muted

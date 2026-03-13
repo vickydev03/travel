@@ -16,33 +16,43 @@ function ExploreView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Compute filters from URL
   const filters: ExploreFilterState = {
-    tourTypeId: searchParams.get("tourTypeId") ? Number(searchParams.get("tourTypeId")) : undefined,
-    categoryId: searchParams.get("categoryId") ? Number(searchParams.get("categoryId")) : undefined,
+    tourTypeId: searchParams.get("tourTypeId")
+      ? Number(searchParams.get("tourTypeId"))
+      : undefined,
+    categoryId: searchParams.get("categoryId")
+      ? Number(searchParams.get("categoryId"))
+      : undefined,
     month: searchParams.get("month") || undefined,
-    minPrice: searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined,
-    maxPrice: searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined,
+    minPrice: searchParams.get("minPrice")
+      ? Number(searchParams.get("minPrice"))
+      : undefined,
+    maxPrice: searchParams.get("maxPrice")
+      ? Number(searchParams.get("maxPrice"))
+      : undefined,
     search: searchParams.get("search") || "",
-    sortBy: (searchParams.get("sortBy") as ExploreFilterState["sortBy"]) || "date_asc",
+    sortBy:
+      (searchParams.get("sortBy") as ExploreFilterState["sortBy"]) ||
+      "date_asc",
   };
 
-  // Update URL helper
-  const setFilters = useCallback((newFilters: ExploreFilterState) => {
-    const params = new URLSearchParams(searchParams.toString());
-    
-    Object.entries(newFilters).forEach(([key, value]) => {
-      if (value === undefined || value === "") {
-        params.delete(key);
-      } else {
-        params.set(key, String(value));
-      }
-    });
+  const setFilters = useCallback(
+    (newFilters: ExploreFilterState) => {
+      const params = new URLSearchParams(searchParams.toString());
 
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }, [searchParams, pathname, router]);
+      Object.entries(newFilters).forEach(([key, value]) => {
+        if (value === undefined || value === "") {
+          params.delete(key);
+        } else {
+          params.set(key, String(value));
+        }
+      });
 
-  // Debounced search
+      router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+    },
+    [searchParams, pathname, router]
+  );
+
   const [debouncedSearch, setDebouncedSearch] = useState("");
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -51,7 +61,6 @@ function ExploreView() {
     return () => clearTimeout(timer);
   }, [filters.search]);
 
-  // Fetch tour types & categories for filter pills
   const { data: tourTypes } = useSuspenseQuery(
     trpc.tours.getTripType.queryOptions()
   );
@@ -60,13 +69,11 @@ function ExploreView() {
     trpc.tours.getCategories.queryOptions()
   );
 
-  // Cursor pagination state
   const [allTrips, setAllTrips] = useState<any[]>([]);
   const [cursor, setCursor] = useState<number | undefined>(undefined);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  // Build the query input
   const queryInput = {
     tourTypeId: filters.tourTypeId,
     categoryId: filters.categoryId,
@@ -79,12 +86,10 @@ function ExploreView() {
     cursor: undefined as number | undefined,
   };
 
-  // Initial data fetch
   const { data: initialData, isFetching: isInitialFetching } = useQuery(
     trpc.tours.exploreTrips.queryOptions(queryInput)
   );
 
-  // Reset trips when filters change
   useEffect(() => {
     if (initialData) {
       setAllTrips(initialData.trips);
@@ -93,7 +98,6 @@ function ExploreView() {
     }
   }, [initialData]);
 
-  // Load more handler
   const loadMore = useCallback(async () => {
     if (!cursor || isLoadingMore) return;
     setIsLoadingMore(true);
@@ -129,54 +133,50 @@ function ExploreView() {
     <div className="min-h-screen bg-gradient-to-b from-[#f8faf9] to-white">
       {/* Hero Section */}
       <div className="relative overflow-hidden bg-gradient-to-br from-[#003022] via-[#00503a] to-[#003022]">
-        {/* Decorative elements */}
-        <div className="absolute inset-0 opacity-10">
+        {/* Decorative elements - hidden on mobile for performance */}
+        <div className="absolute inset-0 opacity-10 hidden sm:block">
           <div className="absolute top-[45%] left-10 w-72 h-72 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-emerald-300 rounded-full blur-3xl"></div>
         </div>
 
-        <div className="relative px-5 md:px-20 py-12 md:py-20">
-          <div className="flex items-center gap-2 mb-3">
-            <Compass className="size-5 text-amber-400" />
-            <span className="text-amber-400/90 text-sm font-medium tracking-wide uppercase">
+        <div className="relative px-4 sm:px-5 md:px-10 lg:px-20 py-8 sm:py-12 md:py-16 lg:py-20">
+          <div className="flex items-center gap-2 mb-2 sm:mb-3">
+            <Compass className="size-4 sm:size-5 text-amber-400" />
+            <span className="text-amber-400/90 text-xs sm:text-sm font-medium tracking-wide uppercase">
               Discover Adventures
             </span>
           </div>
-          <h1 className="font-saira text-3xl md:text-5xl font-semibold text-white tracking-tight leading-tight">
+          <h1 className="font-saira text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-white tracking-tight leading-tight">
             Explore Our{" "}
             <span className="bg-gradient-to-r from-amber-300 to-amber-400 bg-clip-text text-transparent">
               Trips
             </span>
           </h1>
-          <p className="mt-3 text-white/70 text-base md:text-lg max-w-xl">
+          <p className="mt-2 sm:mt-3 text-white/70 text-sm sm:text-base md:text-lg max-w-xl leading-relaxed">
             Find the perfect group tour for your next adventure. Filter by
             destination, budget, and travel dates.
           </p>
 
-          {/* Quick stats */}
-          <div className="mt-6 flex items-center gap-6">
+          {/* Quick stats - stacked on very small screens */}
+          <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
-                <MapPin className="size-4 text-amber-400" />
+              <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                <MapPin className="size-3.5 sm:size-4 text-amber-400" />
               </div>
-              <div>
-                <p className="text-white font-medium text-sm">
-                  {tourTypes.length} Destinations
-                </p>
-              </div>
-            </div>
-            <div className="h-6 w-px bg-white/20"></div>
-            <div>
-              <p className="text-white font-medium text-sm">
-                {trips.length}+ Trips Available
+              <p className="text-white font-medium text-xs sm:text-sm">
+                {tourTypes.length} Destinations
               </p>
             </div>
+            <div className="hidden sm:block h-6 w-px bg-white/20"></div>
+            <p className="text-white font-medium text-xs sm:text-sm pl-9 sm:pl-0">
+              {trips.length}+ Trips Available
+            </p>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="px-5 md:px-20 py-6 md:py-10">
+      <div className="px-4 sm:px-5 md:px-10 lg:px-20 py-4 sm:py-6 md:py-8 lg:py-10">
         {/* Filters */}
         <ExploreFilters
           tourTypes={tourTypes}
@@ -186,11 +186,12 @@ function ExploreView() {
         />
 
         {/* Results count */}
-        <div className="mt-6 mb-4 flex items-center justify-between">
-          <p className="text-sm text-gray-500 font-medium">
+        <div className="mt-4 sm:mt-6 mb-3 sm:mb-4 flex items-center justify-between">
+          <p className="text-xs sm:text-sm text-gray-500 font-medium">
             {isLoading ? (
               <span className="inline-flex items-center gap-2">
-                <Loader2 className="size-4 animate-spin" /> Loading trips...
+                <Loader2 className="size-3.5 sm:size-4 animate-spin" /> Loading
+                trips...
               </span>
             ) : (
               <>
@@ -206,24 +207,24 @@ function ExploreView() {
 
         {/* Trip Grid */}
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="aspect-[0.85/1] rounded-2xl bg-gray-100 animate-pulse"
+                className="aspect-[0.85/1] rounded-xl sm:rounded-2xl bg-gray-100 animate-pulse"
               />
             ))}
           </div>
         ) : trips.length === 0 ? (
           /* Empty State */
-          <div className="flex flex-col items-center justify-center py-20 text-center">
-            <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-              <Compass className="size-10 text-gray-300" />
+          <div className="flex flex-col items-center justify-center py-12 sm:py-16 md:py-20 text-center px-4">
+            <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-100 flex items-center justify-center mb-3 sm:mb-4">
+              <Compass className="size-8 sm:size-10 text-gray-300" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-1.5 sm:mb-2">
               No trips found
             </h3>
-            <p className="text-gray-500 max-w-sm mb-6">
+            <p className="text-gray-500 text-sm sm:text-base max-w-sm mb-4 sm:mb-6">
               Try adjusting your filters or search query to discover more
               amazing trips.
             </p>
@@ -240,14 +241,14 @@ function ExploreView() {
                 })
               }
               variant="outline"
-              className="rounded-full px-6"
+              className="rounded-full px-5 sm:px-6 text-sm sm:text-base"
             >
               Clear All Filters
             </Button>
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 md:gap-6">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
               {trips.map((trip) => (
                 <div key={trip.id} className="w-full">
                   <TripsCard trip={trip} />
@@ -257,11 +258,11 @@ function ExploreView() {
 
             {/* Load More */}
             {hasMore && (
-              <div className="flex justify-center mt-10">
+              <div className="flex justify-center mt-6 sm:mt-8 md:mt-10 pb-4 sm:pb-0">
                 <Button
                   onClick={loadMore}
                   disabled={isLoadingMore}
-                  className="gold-gradient-soft rounded-full px-8 py-5 font-medium text-base shadow-lg hover:shadow-xl transition-shadow"
+                  className="gold-gradient-soft rounded-full px-6 sm:px-8 py-4 sm:py-5 font-medium text-sm sm:text-base shadow-lg hover:shadow-xl transition-shadow w-full sm:w-auto max-w-xs sm:max-w-none"
                 >
                   {isLoadingMore ? (
                     <span className="inline-flex items-center gap-2">

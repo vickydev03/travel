@@ -103,6 +103,7 @@ function TripBannerContainer({ tripId }: { tripId: number }) {
 function AboutTourContainer({ tripId }: { tripId: number }) {
     const trpc = useTRPC();
     const { data } = useSuspenseQuery(trpc.tours.getTrip.queryOptions({ tripId }));
+    if (!data) return null;
     return <AboutTour about={data.About} title={data.title} />;
 }
 

@@ -74,6 +74,12 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
+      <link
+  rel="preload"
+  href="/video/video-1.webm"
+  as="video"
+  type="video/webm"
+        />
       <body
         className={`${poppins.variable} ${saira.variable} ${inter.variable} ${cedarville.variable} antialiased required:`}>
         <TRPCReactProvider>
