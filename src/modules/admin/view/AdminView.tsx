@@ -21,6 +21,7 @@ import {
   LayoutDashboard, Map, Mountain, CalendarDays, Users, Settings, Plus,
   Trash2, Pencil, Eye, ChevronLeft, ChevronRight, Star, MessageSquare,
   BookOpen, Tag, HelpCircle, LogOut, Loader2, ShieldAlert, List, Clock, Film,
+  Menu, X,
 } from "lucide-react";
 import ImageUpload from "../component/ImageUpload";
 import dynamic from "next/dynamic";
@@ -71,6 +72,7 @@ function TabSkeleton() {
 // ── Main Admin View ────────────────────────────────────────────────────
 export default function AdminView() {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user, loading } = useAuth();
 
   const navItems = [
@@ -109,17 +111,32 @@ export default function AdminView() {
 
   return (
     <div className="flex h-screen bg-slate-50">
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-64 bg-slate-900 text-white flex flex-col">
-        <div className="p-6 border-b border-slate-700">
-          <h1 className="text-xl font-bold tracking-tight">Admin Panel</h1>
-          <p className="text-xs text-slate-400 mt-1">Stranger Together</p>
+      <aside className={`fixed inset-y-0 left-0 z-40 w-64 bg-slate-900 text-white flex flex-col transform transition-transform duration-200 ease-in-out md:relative md:translate-x-0 ${
+        sidebarOpen ? "translate-x-0" : "-translate-x-full"
+      }`}>
+        <div className="p-6 border-b border-slate-700 flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight">Admin Panel</h1>
+            <p className="text-xs text-slate-400 mt-1">Stranger Together</p>
+          </div>
+          <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
+            <X size={20} />
+          </button>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <button
               key={item.value}
-              onClick={() => setActiveTab(item.value)}
+              onClick={() => { setActiveTab(item.value); setSidebarOpen(false); }}
               className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                 activeTab === item.value
                   ? "bg-white/10 text-white"
@@ -139,8 +156,15 @@ export default function AdminView() {
       </aside>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto">
-        <div className="p-8 max-w-7xl mx-auto">
+      <main className="flex-1 overflow-y-auto w-full">
+        {/* Mobile header */}
+        <div className="sticky top-0 z-20 bg-slate-900 text-white px-4 py-3 flex items-center gap-3 md:hidden">
+          <button onClick={() => setSidebarOpen(true)}>
+            <Menu size={22} />
+          </button>
+          <span className="font-semibold text-sm">Admin Panel</span>
+        </div>
+        <div className="p-4 md:p-8 max-w-7xl mx-auto">
           <ErrorBoundary>
             <Suspense fallback={<TabSkeleton />}>
               {activeTab === "dashboard" && <DashboardTab />}
@@ -178,8 +202,8 @@ function DashboardTab() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">Dashboard</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">Dashboard</h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {cards.map((card) => (
           <Card key={card.title} className="border-0 shadow-sm">
             <CardContent className="p-5">
@@ -249,7 +273,7 @@ function ToursTab() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">Tours</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800">Tours</h2>
         <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) setEditTour(null); }}>
           <DialogTrigger asChild>
             <Button className="gap-2"><Plus size={16} /> Add Tour</Button>
@@ -269,6 +293,7 @@ function ToursTab() {
       </div>
 
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -316,6 +341,7 @@ function ToursTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -329,7 +355,7 @@ function TourFormContent({ tourTypes, editTour, onSubmit, loading }: any) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-4">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Title</Label>
           <Input name="title" defaultValue={editTour?.title} required />
@@ -358,7 +384,7 @@ function TourFormContent({ tourTypes, editTour, onSubmit, loading }: any) {
         <RichTextEditor value={about} onChange={setAbout} placeholder="Write about this tour..." />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <input type="hidden" name="thumbnailImageUrl" value={thumbnailImageUrl} />
           <ImageUpload label="Thumbnail Image" value={thumbnailImageUrl} onChange={setThumbnailImageUrl} accept="image/*" />
@@ -416,7 +442,7 @@ function TripsTab() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">Trips</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800">Trips</h2>
         <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) setEditTrip(null); }}>
           <DialogTrigger asChild>
             <Button className="gap-2"><Plus size={16} /> Add Trip</Button>
@@ -447,6 +473,7 @@ function TripsTab() {
       </Dialog>
 
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -502,6 +529,7 @@ function TripsTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -625,7 +653,7 @@ function TripDatesManager({ trip }: { trip: any }) {
       {showAddForm ? (
         <div className="border-2 border-dashed border-blue-200 rounded-xl p-4 bg-blue-50/50 space-y-4">
           <h4 className="font-semibold text-sm text-slate-700">Add New Date</h4>
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div className="space-y-1">
               <Label className="text-xs">Start Date</Label>
               <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
@@ -638,7 +666,7 @@ function TripDatesManager({ trip }: { trip: any }) {
 
           <div>
             <Label className="text-xs font-semibold text-slate-600 mb-2 block">Pricing per Sharing Type</Label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div className="space-y-1">
                 <Label className="text-xs text-slate-500">Single Sharing (₹)</Label>
                 <Input type="number" placeholder="e.g. 12000" value={singlePrice} onChange={(e) => setSinglePrice(e.target.value)} />
@@ -715,7 +743,7 @@ function TripFormContent({ tours, categories, editTrip, createMut, updateMut }: 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Title</Label>
           <Input name="title" defaultValue={editTrip?.title} required />
@@ -726,7 +754,7 @@ function TripFormContent({ tours, categories, editTrip, createMut, updateMut }: 
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label>Tour</Label>
           <Select value={tourId} onValueChange={setTourId}>
@@ -760,12 +788,12 @@ function TripFormContent({ tours, categories, editTrip, createMut, updateMut }: 
         <RichTextEditor value={about} onChange={setAbout} placeholder="About this trip..." />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ImageUpload label="Thumbnail Image" value={thumbnailImageUrl} onChange={setThumbnailImageUrl} accept="image/*" />
         <ImageUpload label="Card Image" value={cardImageUrl} onChange={setCardImageUrl} accept="image/*" />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ImageUpload label="Thumbnail Video" value={thumbnailVideoUrl} onChange={setThumbnailVideoUrl} accept="video/*" />
         <ImageUpload label="Itinerary Image" value={itineraryImageUrl} onChange={setItineraryImageUrl} accept="image/*" />
       </div>
@@ -820,8 +848,9 @@ function BookingsTab() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">Bookings</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">Bookings</h2>
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -866,6 +895,7 @@ function BookingsTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -885,8 +915,9 @@ function UsersTab() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">Users</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">Users</h2>
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -926,6 +957,7 @@ function UsersTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -939,9 +971,9 @@ function SettingsTab() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">Settings</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">Settings</h2>
       <Tabs value={settingsTab} onValueChange={setSettingsTab}>
-        <TabsList>
+        <TabsList className="flex-wrap h-auto">
           <TabsTrigger value="tourTypes" className="gap-1"><Tag size={14} /> Tour Types</TabsTrigger>
           <TabsTrigger value="categories" className="gap-1"><Mountain size={14} /> Categories</TabsTrigger>
           <TabsTrigger value="faqs" className="gap-1"><HelpCircle size={14} /> FAQs</TabsTrigger>
@@ -991,6 +1023,7 @@ function TourTypesSection() {
         </Dialog>
       </div>
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow><TableHead>Title</TableHead><TableHead>Slug</TableHead><TableHead>Tours</TableHead><TableHead>Priority</TableHead><TableHead className="text-right">Actions</TableHead></TableRow>
@@ -1009,6 +1042,7 @@ function TourTypesSection() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -1047,6 +1081,7 @@ function CategoriesSection() {
         </Dialog>
       </div>
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow><TableHead>Title</TableHead><TableHead>Slug</TableHead><TableHead>Trips</TableHead><TableHead className="text-right">Actions</TableHead></TableRow>
@@ -1064,6 +1099,7 @@ function CategoriesSection() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -1114,6 +1150,7 @@ function FaqsSection() {
         </Dialog>
       </div>
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow><TableHead>Question</TableHead><TableHead>Tour</TableHead><TableHead className="text-right">Actions</TableHead></TableRow>
@@ -1130,6 +1167,7 @@ function FaqsSection() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -1147,6 +1185,7 @@ function ReviewsSection() {
   return (
     <div className="mt-4">
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow><TableHead>User</TableHead><TableHead>Tour</TableHead><TableHead>Rating</TableHead><TableHead>Review</TableHead><TableHead className="text-right">Actions</TableHead></TableRow>
@@ -1169,6 +1208,7 @@ function ReviewsSection() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -1227,11 +1267,11 @@ function ItineraryTab() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">Itinerary</h2>
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between mb-6">
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800">Itinerary</h2>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <Select value={selectedTripId} onValueChange={setSelectedTripId}>
-            <SelectTrigger className="w-64">
+            <SelectTrigger className="w-full md:w-64">
               <SelectValue placeholder="Select a trip" />
             </SelectTrigger>
             <SelectContent>
@@ -1376,7 +1416,7 @@ function FaqTab() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">FAQs</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800">FAQs</h2>
         <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) setEditFaq(null); }}>
           <DialogTrigger asChild>
             <Button className="gap-2"><Plus size={16} /> Add FAQ</Button>
@@ -1416,6 +1456,7 @@ function FaqTab() {
       </div>
 
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -1455,6 +1496,7 @@ function FaqTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -1484,8 +1526,9 @@ function BookingSessionsTab() {
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-slate-800 mb-6">Booking Sessions</h2>
+      <h2 className="text-xl md:text-2xl font-bold text-slate-800 mb-6">Booking Sessions</h2>
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -1543,6 +1586,7 @@ function BookingSessionsTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );
@@ -1589,7 +1633,7 @@ function VibesTab() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-slate-800">Vibes</h2>
+        <h2 className="text-xl md:text-2xl font-bold text-slate-800">Vibes</h2>
         <Dialog open={dialogOpen} onOpenChange={(o) => { setDialogOpen(o); if (!o) setEditVibe(null); }}>
           <DialogTrigger asChild>
             <Button className="gap-2"><Plus size={16} /> Add Vibe</Button>
@@ -1608,6 +1652,7 @@ function VibesTab() {
       </div>
 
       <Card className="border-0 shadow-sm">
+        <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
@@ -1649,6 +1694,7 @@ function VibesTab() {
             ))}
           </TableBody>
         </Table>
+        </div>
       </Card>
     </div>
   );

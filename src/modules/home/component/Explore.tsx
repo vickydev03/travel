@@ -1,8 +1,11 @@
+"use client"
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 function Explore() {
+  const router=useRouter()
   return (
     <section className="w-full px-4 py-12 md:py-20">
       <div
@@ -26,7 +29,7 @@ function Explore() {
           </p>
 
           <div className="flex justify-center md:justify-start">
-            <Button className="rounded-full px-6 py-2 text-sm tracking-wider border border-stone-500 text-stone-600 bg-transparent hover:bg-stone-100 transition">
+            <Button onClick={() => router.push("/explore") } className="rounded-full px-6 py-2 text-sm tracking-wider border border-stone-500 text-stone-600 bg-transparent hover:bg-stone-100 transition">
               Explore
             </Button>
           </div>

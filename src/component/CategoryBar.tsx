@@ -35,13 +35,13 @@ function CategoryBar() {
       subCategary: [
         {
           title: "International Group Trips",
-          url: "",
+          url: "/explore/international-trips",
           icon: null,
           emoji: "✈️",
         },
         {
           title: "Domestic Groups Trips",
-          url: "",
+          url: "/explore/domestic-trips",
           icon: "/icon/india.png",
           emoji: null,
         },
@@ -53,8 +53,8 @@ function CategoryBar() {
       icon: null,
       emoji: "🏷️",
       subCategary: [
-        { title: "New Year Gateways", url: "", icon: null, emoji: "🔥" },
-        { title: "Goa Trip", url: "", icon: null, emoji: "🔥" },
+        // { title: "New Year Gateways", url: "", icon: null, emoji: "🔥" },
+        { title: "Goa Trip", url: "/explore/goa-trips", icon: null, emoji: "🔥" },
       ],
     },
     {
@@ -63,8 +63,8 @@ function CategoryBar() {
       icon: null,
       emoji: "🧳",
       subCategary: [
-        { title: "Weakend Trip", url: "", icon: null, emoji: "🛻" },
-        { title: "Spritual Trips", url: "", icon: null, emoji: "🧘‍♀️" },
+        { title: "Weakend Trip", url: "/explore/weakend-trips", icon: null, emoji: "🛻" },
+        { title: "Spritual Trips", url: "/explore/spritual-trips", icon: null, emoji: "🧘‍♀️" },
       ],
     },
     {
@@ -75,28 +75,28 @@ function CategoryBar() {
       subCategary: null,
     },
     { title: "Below 10K", url: "", icon: null, emoji: "💸", subCategary: null },
-    {
-      title: "Customised Trips",
-      url: null,
-      icon: null,
-      emoji: "🌏",
-      subCategary: [
-        { title: "International Trips", url: "", icon: null, emoji: "✈️" },
-        {
-          title: "Domestic Trips",
-          url: "",
-          icon: "/icon/india.png",
-          emoji: null,
-        },
-        {
-          title: "Corporate Trips",
-          url: "",
-          icon: null,
-          emoji: "🏢",
-        },
-      ],
-    },
-    { title: "About Us", url: "", icon: null, emoji: "🤵", subCategary: null },
+    // {
+    //   title: "Customised Trips",
+    //   url: null,
+    //   icon: null,
+    //   emoji: "🌏",
+    //   subCategary: [
+    //     { title: "International Trips", url: "/explore/international-trips", icon: null, emoji: "✈️" },
+    //     {
+    //       title: "Domestic Trips",
+    //       url: "/explore/international-trips",
+    //       icon: "/icon/india.png",
+    //       emoji: null,
+    //     },
+    //     {
+    //       title: "Corporate Trips",
+    //       url: "/explore/corporate-trips",
+    //       icon: null,
+    //       emoji: "🏢",
+    //     },
+    //   ],
+    // },
+    { title: "About Us", url: "/about-us", icon: null, emoji: "🤵", subCategary: null },
   ];
 
   const [openMenu, setOpenMenu] = useState<string | null>(null);

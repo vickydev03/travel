@@ -684,7 +684,7 @@ export default function AboutUsView() {
         <section className="hero">
           <div className="hero-bg w-full h-full">
             <Image
-              src="/image/img3.png"
+              src="/image/IMG_6937.webp"
               alt="Mountains"
               fill
               quality={70}

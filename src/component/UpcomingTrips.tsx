@@ -10,6 +10,7 @@ import CustomSVG from "./Svg";
 import { useTRPC } from "@/trpc/client";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 type Props = {
   tours?: getAllTour;
@@ -17,12 +18,13 @@ type Props = {
 };
 function UpcomingTrips({ tours: initialTours, trips: initialTrips }: Props) {
   const trpc = useTRPC();
+  const router=useRouter()
 
   const { data: tours } = useSuspenseQuery({
     ...trpc.tours.getAllTour.queryOptions(),
     initialData: initialTours,
   });
-
+  
   const { data: trips } = useSuspenseQuery({
     ...trpc.tours.upcomingTrips.queryOptions(),
     initialData: initialTrips,
@@ -40,6 +42,7 @@ function UpcomingTrips({ tours: initialTours, trips: initialTrips }: Props) {
             </h1>
             <Button
               variant={"secondary"}
+              onClick={() => router.push("/explore") }
               className=" px-2 md:px-6 bg-transparent text-blue-600 rounded-full text-[12px] py-2  md:py-3 md:border md:border-stone-500 md:text-stone-600  font-saira"
             >
               See All

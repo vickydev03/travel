@@ -57,11 +57,11 @@ function TripDetails({ trip: initialTrip, tripId, handleBook, selectedMonth ,set
   
   console.log(filteredDates,78848)
   return (
-    <div className=" sticky top-44 ">
-      <div className="flex w-full p-6  flex-col gap-5 rounded-2xl  border border-[#D8D8D8] bg-white  shadow-md">
-        <div className="flex flex-col  font-medium">
+    <div className="md:sticky md:top-44">
+      <div className="flex w-full p-4 md:p-6 flex-col gap-5 rounded-2xl border border-[#D8D8D8] bg-white shadow-md">
+        <div className="flex flex-col font-medium">
           <div className="text-sm">Trip Starts From</div>
-          <div className="flex gap-2 lg:items-end  lg:justify-between">
+          <div className="flex gap-2 lg:items-end lg:justify-between">
             <div className="flex items-end gap-2 md:flex-col lg:flex-row">
               <div className="flex items-center gap-2 md:flex-col lg:flex-row">
                 <span className=" text-[#008342] text-[1.75rem]">
@@ -83,13 +83,13 @@ function TripDetails({ trip: initialTrip, tripId, handleBook, selectedMonth ,set
         {months.length > 0 ? (
           <>
             <div className="flex justify-between items-center">
-              <p>📅 Trip Dates</p>
+              <p className="font-medium">📅 Trip Dates</p>
               <Combobox value={selectedMonth} onValueChange={setSelectedMonth} items={months}>
                 <ComboboxInput
-                  className=" border border-black rounded-full  max-w-28"
+                  className=" border border-black rounded-full max-w-28"
                   placeholder="Select a date"
                 />
-                <ComboboxContent className="rounded-full border border-[#eee]">
+                <ComboboxContent className="rounded-full border border-[#eee] z-[100]">
                   <ComboboxEmpty>No items found.</ComboboxEmpty>
                   <ComboboxList>
                     {(item) => (
@@ -106,14 +106,11 @@ function TripDetails({ trip: initialTrip, tripId, handleBook, selectedMonth ,set
               </Combobox>
             </div>
             <div className="flex flex-col gap-3">
-            
             {
               [...filteredDates].map((date) => (
-                <div onClick={()=>setSelectedDate(date)} key={date.id} className="flex items-center gap-2 justify-between cursor-pointer">
-                  <div className="flex flex-col gap-2">
-                  
+                <div onClick={()=>setSelectedDate(date)} key={date.id} className="flex items-center gap-2 justify-between cursor-pointer p-2 hover:bg-gray-50 rounded-lg transition-colors">
+                  <div className="flex flex-col gap-1">
                       <h3 className="text-black font-medium">{dayjs(date.startDate).format("DD MMM YYYY")}</h3>
-
                     <p className="text-stone-800 capitalize text-xs">
                       Starting ₹{" "}
                       {date.pricing.length > 0
@@ -122,9 +119,9 @@ function TripDetails({ trip: initialTrip, tripId, handleBook, selectedMonth ,set
                       /Person{" "}
                     </p>
                   </div>
-                  <div className="w-6 h-6 rounded-full border-black border  " role="button">
-                    {selectedDate?.startDate === date.startDate && (
-                      <Image src={"/icon/check.svg"} height={100} width={100} alt="check" />
+                  <div className="w-6 h-6 rounded-full border-black border flex items-center justify-center" role="button">
+                    {selectedDate?.id === date.id && (
+                      <Image src={"/icon/check.svg"} height={16} width={16} alt="check" />
                     )}
                   </div>
                 </div>
@@ -139,18 +136,30 @@ function TripDetails({ trip: initialTrip, tripId, handleBook, selectedMonth ,set
           </div>
         )}
         <div className="flex items-center justify-between">
-          <p className="font-medium  text-lg tracking-wide">🧑‍🦱 No. of Travellers</p>
-          <div className="flex items-center gap-2">
-            <button className="w-8 h-8 rounded-full border border-black flex items-center justify-center cursor-pointer" onClick={()=>travellers>1 && setTravellers(travellers-1)}>-</button>
-            <span className="w-8 h-8 rounded-full border border-black flex items-center justify-center">{travellers}</span>
-            <button className="w-8 h-8 rounded-full border border-black flex items-center justify-center cursor-pointer" onClick={()=>setTravellers(travellers+1)}>+</button>
+          <p className="font-medium text-lg tracking-wide">🧑‍🦱 No. of Travellers</p>
+          <div className="flex items-center gap-3">
+            <button 
+                className="w-10 h-10 rounded-full border border-black flex items-center justify-center cursor-pointer active:scale-90 transition-transform" 
+                onClick={(e)=>{
+                    e.stopPropagation();
+                    travellers > 1 && setTravellers(travellers - 1);
+                }}
+            >-</button>
+            <span className="w-10 h-10 rounded-full border border-black flex items-center justify-center font-medium bg-gray-50">{travellers}</span>
+            <button 
+                className="w-10 h-10 rounded-full border border-black flex items-center justify-center cursor-pointer active:scale-90 transition-transform" 
+                onClick={(e)=>{
+                    e.stopPropagation();
+                    setTravellers(travellers + 1);
+                }}
+            >+</button>
           </div>
         </div>
-        <div className="flex items-center justify-between px-4">
-          <Button onClick={handleBook} className=" gold-gradient-soft w-full  rounded-full py-5 cursor-pointer">Book Now</Button>
+        <div className="flex items-center justify-between">
+          <Button onClick={handleBook} className=" gold-gradient-soft w-full rounded-full py-6 cursor-pointer text-lg font-semibold shadow-md active:scale-[0.98] transition-all">Book Now</Button>
         </div>
-        <div className="flex items-center gap-2">
-          Any Doubt? <Button className="border bg-white  text-black hover:bg-white/50 border-black/20 rounded-full py-1 cursor-pointer font-medium flex items-center gap-2"> <Image src={"/icon/whatsapp.svg"} height={25} width={25} alt="whatsapp" /> Whatsapp</Button>
+        <div className="flex items-center gap-2 text-sm">
+          Any Doubt? <Button className="border bg-white text-black hover:bg-gray-50 border-black/20 rounded-full py-2 px-4 cursor-pointer font-medium flex items-center gap-2 shadow-sm"> <Image src={"/icon/whatsapp.svg"} height={20} width={20} alt="whatsapp" /> Whatsapp</Button>
         </div>
       </div>
     </div>

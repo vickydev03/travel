@@ -23,8 +23,7 @@ const NAV = [
     links: [
       { label: "Explore", href: "/explore" },
       { label: "Tours", href: "/tours" },
-      { label: "Destinations", href: "/destinations" },
-      { label: "Trip Calendar", href: "/calendar" },
+      { label: "Destinations", href: "/explore" },
     ],
   },
   {
@@ -32,23 +31,21 @@ const NAV = [
     links: [
       { label: "About Us", href: "/about-us" },
       { label: "Our Story", href: "/our-story" },
-      { label: "The Team", href: "/team" },
-      { label: "Careers", href: "/careers" },
     ],
   },
   {
     heading: "Help",
     links: [
       { label: "Contact Us", href: "/contact-us" },
-      { label: "FAQs", href: "/faqs" },
-      { label: "Travel Policy", href: "/policy" },
-      { label: "Reviews", href: "/reviews" },
+      // { label: "FAQs", href: "/faqs" },
+      // { label: "Travel Policy", href: "/policy" },
+      // { label: "Reviews", href: "/reviews" },
     ],
   },
 ];
 
 const SOCIALS = [
-  { icon: Instagram, label: "Instagram", href: "#" },
+  { icon: Instagram, label: "Instagram", href: "https://www.instagram.com/thestrangerstogether/" },
   { icon: Youtube, label: "YouTube", href: "#" },
   { icon: Twitter, label: "Twitter", href: "#" },
 ];

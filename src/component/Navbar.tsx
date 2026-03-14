@@ -55,74 +55,79 @@ function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const menu = [
-    {
-      title: "Group Trips",
-      url: null,
-      icon: <Users className="size-4" />,
-      emoji: null,
-      subCategary: [
-        { title: "International Group Trips", url: "/trips/international-group", icon: null, emoji: "✈️" },
-        { title: "Domestic Group Trips", url: "/trips/domestic-group", icon: "/icon/india.png", emoji: null },
-      ],
-    },
-    {
-      title: "Deals",
-      url: null,
-      icon: null,
-      emoji: "🏷️",
-      subCategary: [
-        { title: "New Year Gateways", url: "/deals/new-year", icon: null, emoji: "🔥" },
-        { title: "Goa Trip", url: "/deals/goa", icon: null, emoji: "🔥" },
-      ],
-    },
-
-    {
-      title: "Travel Style",
-      url: null,
-      icon: null,
-      emoji: "🧳",
-      subCategary: [
-        { title: "Weekend Trip", url: "/style/weekend", icon: null, emoji: "🛻" },
-        { title: "Spiritual Trips", url: "/style/spiritual", icon: null, emoji: "🧘‍♀️" },
-      ],
-    },
-
-    {
-      title: "Upcoming Group Trips",
-      url: "/trips/upcoming",
-      icon: null,
-      emoji: "🗓️",
-      subCategary: null,
-    },
-
-    {
-      title: "Below 10K",
-      url: "/deals/below-10k",
-      icon: null,
-      emoji: "💸",
-      subCategary: null,
-    },
-
-    {
-      title: "Customised Trips",
-      url: null,
-      icon: null,
-      emoji: "🌏",
-      subCategary: [
-        { title: "International Trips", url: "/custom/international", icon: null, emoji: "✈️" },
-        { title: "Domestic Trips", url: "/custom/domestic", icon: "/icon/india.png", emoji: null },
-        { title: "Corporate Trips", url: "/custom/corporate", icon: null, emoji: "🏢" },
-      ],
-    },
-    {
-      title: "About Us",
-      url: "/about",
-      icon: null,
-      emoji: "🤵",
-      subCategary: null,
-    },
-  ];
+      const menu = [
+      {
+        title: "Group Trips",
+        url: null,
+        icon: <Users />,
+        emoji: null,
+        subCategary: [
+          {
+            title: "International Group Trips",
+            url: "/explore/international-trips",
+            icon: null,
+            emoji: "✈️",
+          },
+          {
+            title: "Domestic Groups Trips",
+            url: "/explore/domestic-trips",
+            icon: "/icon/india.png",
+            emoji: null,
+          },
+        ],
+      },
+      {
+        title: "Deals",
+        url: null,
+        icon: null,
+        emoji: "🏷️",
+        subCategary: [
+          // { title: "New Year Gateways", url: "", icon: null, emoji: "🔥" },
+          { title: "Goa Trip", url: "/explore/goa-trips", icon: null, emoji: "🔥" },
+        ],
+      },
+      {
+        title: "Travel Style",
+        url: null,
+        icon: null,
+        emoji: "🧳",
+        subCategary: [
+          { title: "Weakend Trip", url: "/explore/weakend-trips", icon: null, emoji: "🛻" },
+          { title: "Spritual Trips", url: "/explore/spritual-trips", icon: null, emoji: "🧘‍♀️" },
+        ],
+      },
+      {
+        title: "Upcoming Group Trips",
+        url: "",
+        icon: null,
+        emoji: "🧳",
+        subCategary: null,
+      },
+      { title: "Below 10K", url: "", icon: null, emoji: "💸", subCategary: null },
+      // {
+      //   title: "Customised Trips",
+      //   url: null,
+      //   icon: null,
+      //   emoji: "🌏",
+      //   subCategary: [
+      //     { title: "International Trips", url: "/explore/international-trips", icon: null, emoji: "✈️" },
+      //     {
+      //       title: "Domestic Trips",
+      //       url: "/explore/international-trips",
+      //       icon: "/icon/india.png",
+      //       emoji: null,
+      //     },
+      //     {
+      //       title: "Corporate Trips",
+      //       url: "/explore/corporate-trips",
+      //       icon: null,
+      //       emoji: "🏢",
+      //     },
+      //   ],
+      // },
+      { title: "About Us", url: "/about-us", icon: null, emoji: "🤵", subCategary: null },
+    ];
+  
 
   const toggleItem = (title: string) => {
     setOpenItem((prev) => (prev === title ? null : title));

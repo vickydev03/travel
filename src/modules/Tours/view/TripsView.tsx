@@ -25,6 +25,7 @@ import { TripDetailsSkeleton, ItinerarySkeleton, InclusionExclusionSkeleton } fr
 import { TourBannerSkeleton, AboutTourSkeleton, ReviewSkeleton, FaqSkeleton } from "../component/TourSkeletons";
 import { TrendingDestinationSkeleton } from "@/modules/home/component/HomeSkeletons";
 import { Suspense } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 function TripsView({ tripId, tourId }: { tripId: number; tourId?: number }) {
   const { user, openLogin, setOpenLogin } = useAuth();
@@ -39,7 +40,7 @@ function TripsView({ tripId, tourId }: { tripId: number; tourId?: number }) {
         <TripBannerContainer tripId={tripId} />
       </Suspense>
 
-      <div className=" w-full h-full m-0">
+      <div className=" w-full h-full m-0 relative">
         <div className="grid pt-4 md:pt-16 grid-cols-1 gap-4  md:grid-cols-12">
           <div className="  col-span-8  flex flex-col gap-8 md:gap-12">
             <Suspense fallback={<AboutTourSkeleton />}>
@@ -69,7 +70,7 @@ function TripsView({ tripId, tourId }: { tripId: number; tourId?: number }) {
             </Suspense>
           </div>
           
-          <div className=" hidden md:block  col-span-4 md:mr-20">
+          <div className=" col-span-4 md:mr-20">
             <Suspense fallback={<TripDetailsSkeleton />}>
                 <TripDetailsContainer tripId={tripId} />
             </Suspense>
@@ -167,21 +168,43 @@ function TripDetailsContainer({ tripId }: { tripId: number }) {
         });
     };
 
+    const detailsContent = (
+        <TripDetails
+            trip={data}
+            handleBook={handleBook}
+            selectedMonth={selectedMonth}
+            setSelectedDate={setSelectedDate}
+            months={months}
+            travellers={travellers}
+            filteredDates={filteredDates}
+            setSelectedMonth={setSelectedMonth}
+            selectedDate={selectedDate}
+            setTravellers={setTravellers}
+        />
+    );
+
     return (
-        <aside className="w-full h-full ">
-            <TripDetails
-                trip={data}
-                handleBook={handleBook}
-                selectedMonth={selectedMonth}
-                setSelectedDate={setSelectedDate}
-                months={months}
-                travellers={travellers}
-                filteredDates={filteredDates}
-                setSelectedMonth={setSelectedMonth}
-                selectedDate={selectedDate}
-                setTravellers={setTravellers}
-            />
-        </aside>
+        <>
+            <aside className="hidden md:block w-full h-full">
+                {detailsContent}
+            </aside>
+            <div className="md:hidden fixed bottom-0 left-0 z-50 w-full bg-white border-t px-4 py-3 shadow-[0_-8px_20px_-1px_rgba(0,0,0,0.1)] flex items-center justify-between pb-safe">
+                <div>
+                   <p className="text-xs text-gray-500 font-medium">Starting from</p>
+                   <p className="text-lg font-bold text-[#008342]">₹{data?.startingPrice}</p>
+                </div>
+                <Sheet>
+                    <SheetTrigger asChild>
+                        <Button className="gold-gradient-soft rounded-full px-8 cursor-pointer shadow-md">Book Now</Button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="h-[90vh] overflow-y-auto px-0 py-10 rounded-t-3xl border-0 shadow-2xl">
+                        <div className="px-4 pb-12">
+                            {detailsContent}
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </>
     );
 }
 
