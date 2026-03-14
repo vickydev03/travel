@@ -14,7 +14,7 @@ function Thumbnail() {
               muted
               className="h-full w-full object-cover aspect-video  md:aspect-auto  "
             >
-              <source src="/video/video-1.mp4" type="video/mp4" />
+              <source src="/video/video-1.webm" type="video/mp4" />
             </video>
           </div>
         </div>
