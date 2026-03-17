@@ -41,24 +41,26 @@ getAllTour: baseProcedure.query(async ({ ctx }) => {
   try {
     const data = await ctx.db.tour.findMany({
       where: {
-        trips: {
-          some: {
-            TripDate: {
-              some: {
-                startDate: {
-                  gte: new Date(),
-                },
-                pricing: {
-                  some: {
-                    price: {
-                      gt: 0,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
+        isActive:true,
+        // trips: {
+        //   some: {
+        //     TripDate: {
+        //       some: {
+        //         startDate: {
+        //           gte: new Date(),
+        //         },
+        //         pricing: {
+        //           some: {
+        //             price: {
+        //               gt: 0,
+        //             },
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
+        
       },
       include: {
         tourType: true,

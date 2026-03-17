@@ -29,7 +29,7 @@ function TourBanner({ thumnailImage: initialImage, thumnailvideo: initialVideo, 
           <div className=" h-full">
             <video
             preload="metadata"
-            poster={thumnailImage}
+            // poster={thumnailImage}
               autoPlay
               loop
               muted

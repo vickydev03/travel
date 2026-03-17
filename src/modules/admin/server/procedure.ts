@@ -108,7 +108,7 @@ export const adminRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       return ctx.db.tour.create({ data: input });
     }),
-
+    
   updateTour: adminProcedure
     .input(z.object({
       id: z.number(),

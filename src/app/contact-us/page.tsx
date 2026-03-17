@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 function ContactUsPage() {
   return (
     <>
-      <ContactUsView />
+      <ContactUsView/>
       <Footer />
     </>
   )
