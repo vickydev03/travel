@@ -34,6 +34,7 @@ export function AuthProvider({ children }: React.PropsWithChildren) {
       }
     )
   );
+  
   console.log(userData,"user data")
 
   useEffect(() => {

@@ -37,6 +37,7 @@ function TourBanner({ thumnailImage: initialImage, thumnailvideo: initialVideo, 
             >
               <source src={thumnailvideo} type="video/mp4" />
             </video>
+            
           </div>
         </div>
       </div>
