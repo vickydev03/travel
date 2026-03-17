@@ -33,7 +33,7 @@ function TourBanner({ thumnailImage: initialImage, thumnailvideo: initialVideo, 
               autoPlay
               loop
               muted
-              className="h-full max-h-[500px] maxheight  object-cover  w-full"
+              className="h-full min-h-[500px] max-h-[500px] maxheight  object-cover  w-full"
             >
               <source src={thumnailvideo} type="video/mp4" />
             </video>
